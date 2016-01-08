@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name="KACPAW",
-    version="0.0.2",
+    version="0.0.0",
     author="Ben Burrill",
     packages=["kacpaw"],
     license="LICENSE",

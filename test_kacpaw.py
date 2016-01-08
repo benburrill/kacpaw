@@ -32,10 +32,6 @@ def test_bot_test_program():
 
     assert bot_test_program.kind == "pjs"
 
-print("Logged in as", session.user.name)
-print("On the program", repr(program.title), "at the url", program.url)
-
-
 def test_edit_program():
     with open("README.rst") as readme:
         program.edit(session, 

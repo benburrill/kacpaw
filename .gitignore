@@ -1,0 +1,3 @@
+# ignore caches for tools we use (Python and PyTest)
+__pycache__
+.cache

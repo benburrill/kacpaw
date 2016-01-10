@@ -10,7 +10,7 @@ Example Usage
 -------------
 
 This example should give you some idea of how to use KACPAW
-.. code-block:: python
+.. code-block::python
     import kacpaw
 
     session = kacpaw.KASession(your_username, your_password)

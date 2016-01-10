@@ -10,7 +10,6 @@ Example Usage
 -------------
 
 This example should give you some idea of how to use KACPAW.  ``code-block`` doesn't seem to work on github, so sorry for the lack of syntax highlighting.
-
 ::
     import kacpaw
 

@@ -9,10 +9,9 @@ KACPAW makes it simple to perform user actions related to the KA Computer Progra
 Example Usage
 -------------
 
-This example should give you some idea of how to use KACPAW
-For some reason it doesn't seem to show up on github...
+This example should give you some idea of how to use KACPAW.  ``code-block`` doesn't seem to work on github, so sorry for the lack of syntax highlighting.
 
-.. code-block:: python
+::
     import kacpaw
 
     session = kacpaw.KASession(your_username, your_password)

@@ -9,6 +9,9 @@ KACPAW makes it simple to perform user actions related to the KA Computer Progra
 Example Usage
 -------------
 
+This example should give you some idea of how to use KACPAW
+For some reason it doesn't seem to show up on github...
+
 .. code-block:: python
     import kacpaw
 

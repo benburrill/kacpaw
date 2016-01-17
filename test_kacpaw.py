@@ -43,6 +43,10 @@ def test_edit_program(session):
             width=578, height=442
         )
 
+def test_edit_program_errors(session):
+    with pytest.raises(KeyError):
+        program.edit(session, not_a_valid_keyword=42)
+
 def test_reply_reply(session):
     comment = ProgramComment("kaencrypted_24b83fe143a09cd4384ec150ada63106_e373eba7cb530161369280dafb3923a16c530c8502577f5cd77076d719034835297bf84dd112b0dedd7cab8a12cb330c3a79e942de63464de8e08406bfb973608db6dd102df955c24ca2055135520c4fa78b19cf4cb5ae3ee686238407a8f4dc4b5998d204edec504bb7aefeb212d97ef9c63438447765d160e376916fded96c818031d8b95ce1a2f4455cbebf07c65b4a897fdc4fef7a91743fcf15fce0d17ff64fc5118971423ee79e5c2df4c9556cc8196b96586c2ef6d9dd8831dd63554a", bot_test_program)
 
@@ -86,6 +90,20 @@ def test_comments(session):
     comment.delete(session)
     with pytest.raises(requests.HTTPError):
         comment.text_content
+
+def test_bad_ids():
+    fake_program = Program("00000000000000")
+    with pytest.raises(requests.HTTPError):
+        fake_program.code
+
+    fake_comment_id = "kaencrypted_{}".format("".join(map("{:02x}".format, b"this is not real comment id")))
+    fake_comment = ProgramComment(fake_comment_id, bot_test_program)
+    with pytest.raises(requests.HTTPError):
+        fake_comment.text_content
+
+    fake_program_comment_reply = ProgramCommentReply(fake_comment_id, bot_test_program)
+    with pytest.raises(requests.HTTPError):
+        print(fake_program_comment_reply.text_content)
 
 def test_users():
     pass

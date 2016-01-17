@@ -105,6 +105,22 @@ class Comment(abcs.Editable, abcs.Replyable, abcs.Deletable):
         return self.comment_id
 
 
+class _CommentDoesntExistError(requests.HTTPError):
+    """
+    This is a hopefully temporary exception that is raised when you try to get
+    data from a comment doesn't exist.
+
+    We subclass from HTTPError, because hopefully in the future, this will be
+    an HTTPError and not a _CommentDoesntExistError
+    """
+    def __init__(self, comment):
+        super().__init__((
+            "{.id} does not identify a valid comment.   For future "
+            "compatibility reasons, if you want to handle this error,  handle "
+            "it as a requests.HTTPError instead of a "
+            "kacpaw._CommentDoesntExistError"
+        ).format(comment))
+
 class ProgramComment(Comment):
     """A comment in the context of a KA program"""
     api_get = property(kaurl("api/internal/discussions/scratchpad/{0.program_id}/comments?qa_expand_key={0.id}").format)
@@ -125,6 +141,25 @@ class ProgramComment(Comment):
         super().__init__(ka_id, context)
         self.program_id = context.program_id
 
+    def _comment_exists(self):
+        """
+        This is yet another horrible workaround to keep this from falling apart.
+
+        Because of the other workarounds to get around the fact that you
+        cannot get metadata from a comment, we've run into problems where it
+        is not always obvious if a comment even exists.  For this reason, we
+        need to have a method to test it for us.
+        """
+        try:
+            # Getting the reply data from a comment should raise an error if
+            # it doesn't exist.  We use Comment's get_reply_data because
+            # ProgramCommentReply's get_reply_data is another one of those
+            # horrible workarounds
+            list(Comment(self.id, self.get_program()).get_reply_data())
+        except requests.HTTPError:
+            return False
+        return True
+
     def get_program(self):
         """Returns the ``Program`` that the comment was posted on."""
         return Program(self.program_id)
@@ -134,7 +169,13 @@ class ProgramComment(Comment):
     def get_metadata(self):
         # when using qa_expand_key, the first comment will be the one we want,
         # so pop out the first comment
-        return super().get_metadata()["feedback"].pop(0)
+        data = super().get_metadata()["feedback"].pop(0)
+
+        # order _might_ matter here on the offchance that a comment is deleted
+        # after we check that it exists an before we get its data
+        if self._comment_exists():
+            return data
+        raise _CommentDoesntExistError(self)
 
     @property
     def url(self):
@@ -163,7 +204,7 @@ class ProgramCommentReply(ProgramComment):
         for comment_data in self.get_parent().get_reply_data():
             if comment_data["key"] == self.id:
                 return comment_data
-        raise TypeError("{.id} does not identify a ProgramCommentReply".format(self))
+        raise _CommentDoesntExistError(self)
 
         # I'm keeping this todo until I can fully address it, although I did
         # add an error

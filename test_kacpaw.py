@@ -99,11 +99,23 @@ def test_bad_ids():
     fake_comment_id = "kaencrypted_{}".format("".join(map("{:02x}".format, b"this is not real comment id")))
     fake_comment = ProgramComment(fake_comment_id, bot_test_program)
     with pytest.raises(requests.HTTPError):
-        fake_comment.text_content
+        fake_comment.get_metadata()
 
     fake_program_comment_reply = ProgramCommentReply(fake_comment_id, bot_test_program)
     with pytest.raises(requests.HTTPError):
-        print(fake_program_comment_reply.text_content)
+        fake_program_comment_reply.get_metadata()
+
+def test_deleted_comments(session):
+    comment = program.reply(session, "Comment to be deleted")
+    comment_reply = comment.reply(session, "Comment reply to be deleted")
+
+    comment_reply.delete(session)
+    with pytest.raises(requests.HTTPError):
+        comment_reply.get_metadata()
+
+    comment.delete(session)
+    with pytest.raises(requests.HTTPError):
+        comment.get_metadata()
 
 def test_users():
     pass

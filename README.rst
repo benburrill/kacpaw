@@ -43,3 +43,15 @@ KACPAW
  * `Github <https://github.com/Potato42/kacpaw>`_
 
 KACPAW uses `Python 3 <https://www.python.org/>`_ with the `requests module <https://pypi.python.org/pypi/requests>`_.  `pytest <https://pypi.python.org/pypi/pytest>`_ is used for testing.
+
+
+The following has nothing to do with KACPAW and is simply a test
+
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    framework:
+        translator: ~
+

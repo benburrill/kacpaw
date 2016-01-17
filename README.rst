@@ -10,7 +10,9 @@ Example Usage
 -------------
 
 This example should give you some idea of how to use KACPAW
-::
+
+.. code-block:: python
+
     import kacpaw
 
     session = kacpaw.KASession(your_username, your_password)
@@ -43,13 +45,3 @@ KACPAW
  * `Github <https://github.com/Potato42/kacpaw>`_
 
 KACPAW uses `Python 3 <https://www.python.org/>`_ with the `requests module <https://pypi.python.org/pypi/requests>`_.  `pytest <https://pypi.python.org/pypi/pytest>`_ is used for testing.
-
-
-The following has nothing to do with KACPAW and is simply a test
-
-
-.. code-block:: python
-
-    # what??? it works?
-    print("Maybe it's that empty line before the code...")
-

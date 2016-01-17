@@ -18,11 +18,13 @@ USERNAME = os.environ["KA_USERNAME"]
 PASSWORD = os.environ["KA_PASSWORD"] # no password for you!
 PROGRAM_ID = os.environ.get("KACPAW_TEST_PROGRAM_ID", BOT_TEST_PROGRAM_ID)
 
-
-session = KASession(USERNAME, PASSWORD)
-program = Program(PROGRAM_ID) 
+program = Program(PROGRAM_ID) # this is a general-purpose program that you can set
 bot_test_program = Program(BOT_TEST_PROGRAM_ID) # This is my KA API Bot Test program
 
+
+@pytest.fixture(scope="session")
+def session():
+    return KASession(USERNAME, PASSWORD)
 
 def test_bot_test_program():
     assert "Bot Test" in bot_test_program.title
@@ -32,7 +34,7 @@ def test_bot_test_program():
 
     assert bot_test_program.kind == "pjs"
 
-def test_edit_program():
+def test_edit_program(session):
     with open("README.rst") as readme:
         program.edit(session, 
             code="\n".join(map("// {}".format, readme.read().split("\n"))), # comment everything out
@@ -41,7 +43,7 @@ def test_edit_program():
             width=578, height=442
         )
 
-def test_reply_reply():
+def test_reply_reply(session):
     comment = ProgramComment("kaencrypted_24b83fe143a09cd4384ec150ada63106_e373eba7cb530161369280dafb3923a16c530c8502577f5cd77076d719034835297bf84dd112b0dedd7cab8a12cb330c3a79e942de63464de8e08406bfb973608db6dd102df955c24ca2055135520c4fa78b19cf4cb5ae3ee686238407a8f4dc4b5998d204edec504bb7aefeb212d97ef9c63438447765d160e376916fded96c818031d8b95ce1a2f4455cbebf07c65b4a897fdc4fef7a91743fcf15fce0d17ff64fc5118971423ee79e5c2df4c9556cc8196b96586c2ef6d9dd8831dd63554a", bot_test_program)
 
     reply = list(comment.get_replies())[-1] # most recent reply
@@ -56,7 +58,7 @@ def test_reply_reply():
     with pytest.raises(requests.HTTPError):
         reply_reply.text_content
 
-def test_comments():
+def test_comments(session):
     comment_text = "This is a temporary comment that will be deleted soon"
     comment = program.reply(session, comment_text)
     assert comment.text_content == comment_text

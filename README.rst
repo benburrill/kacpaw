@@ -48,10 +48,8 @@ KACPAW uses `Python 3 <https://www.python.org/>`_ with the `requests module <htt
 The following has nothing to do with KACPAW and is simply a test
 
 
-.. code-block:: yaml
+.. code-block:: python
 
-    # app/config/config.yml
-
-    framework:
-        translator: ~
+    # what??? it works?
+    print("Maybe it's that empty line before the code...")
 

@@ -6,16 +6,13 @@ from kacpaw import *
 
 import os
 import sys
+import getpass
 from pprint import pprint
 from functools import partial
 from itertools import starmap
 from operator import attrgetter, methodcaller
 
-
 BOT_TEST_PROGRAM_ID = "4617827881975808"
-
-USERNAME = os.environ["KA_USERNAME"]
-PASSWORD = os.environ["KA_PASSWORD"] # no password for you!
 PROGRAM_ID = os.environ.get("KACPAW_TEST_PROGRAM_ID", BOT_TEST_PROGRAM_ID)
 
 program = Program(PROGRAM_ID) # this is a general-purpose program that you can set
@@ -24,7 +21,21 @@ bot_test_program = Program(BOT_TEST_PROGRAM_ID) # This is my KA API Bot Test pro
 
 @pytest.fixture(scope="session")
 def session():
-    return KASession(USERNAME, PASSWORD)
+    try:
+        username = os.environ["KA_USERNAME"]
+        password = os.environ["KA_PASSWORD"]
+    except KeyError:
+        print("\n\nSign in to Khan Academy")
+        print(
+            "  Note: to avoid this in the future, "
+            "set the environment variables "
+            "``KA_USERNAME`` and ``KA_PASSWORD``.")
+
+        username = input("Username: ")
+        password = getpass.getpass("Password: ")
+        print()
+
+    return KASession(username, password)
 
 def test_bot_test_program():
     assert "Bot Test" in bot_test_program.title

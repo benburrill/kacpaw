@@ -2,7 +2,7 @@
 KACPAW (formally known as KACSAW)
 =================================
 
-KACPAW makes it simple to perform user actions related to the KA Computer Programming environment using Python!
+KACPAW makes it simple to perform user actions related to the KA Computer Programming platform using Python!
 
 
 
@@ -33,9 +33,10 @@ Full documentation will be coming soon... er, um eventually...
 
 Running Tests
 -------------
-1) Set the environment variables ``KA_USERNAME`` and ``KA_PASSWORD`` to your KA login info.  If you want all the tests to pass and are someone other than me, you should set ``KACPAW_TEST_PROGRAM_ID`` to a program id for a program you own.  Otherwise, you will get some not-authorized error because you can't edit my program
-2) Run ``py.test -v`` in this directory.
-3) Be patient!  The tests might take some time because we need to send some requests to KA.
+1) Run ``py.test -sv`` in this directory.
+    * To get all the tests to pass, set the environment variable ``KACPAW_TEST_PROGRAM_ID`` to a program you own.
+    * Optionally, set ``KA_USERNAME`` and ``KA_PASSWORD`` to skip the login.
+2) Be patient!  The tests might take some time because we need to send some requests to KA.
 
 
 
